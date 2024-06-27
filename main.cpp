@@ -1,6 +1,6 @@
 #include<iostream>
-#include"./adt/bookADT.cpp"
-#include"./adt/customerADT.cpp"
+#include"./adt/bookADT.h"
+#include"./adt/customerADT.h"
 using namespace std;
 
 main(){
@@ -14,10 +14,13 @@ main(){
     cout<<"[7] Customer Maintenance"<<endl;
     cout<<"[8] Exit Program"<<endl;
     cout<<"Enter your choice: ";cin>>choice;
-    switch (choice){
+    bookADT myBook;
+    do
+    {
+        switch (choice){
 
         case 1:{
-            cout<<"New Book"<<endl;
+            myBook.newBook();
             break;
         }
         case 2:{
@@ -49,7 +52,8 @@ main(){
             break;
         }
         default:{
-            return 0;
+            cout<<"Invalid input. Please try again."<<endl;
         }
     }
+    } while (choice!=8);
 }
