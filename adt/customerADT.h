@@ -20,6 +20,7 @@ private:
         string address;
     };
 
+    const char* customerPath = "./data/customers.txt";
     vector<Customer> customers;
     int getNextID();
     void loadCustomers();
@@ -31,7 +32,7 @@ int CustomerADT::getNextID() {
 }
 
 void CustomerADT::loadCustomers() {
-    ifstream file("customers.txt");
+    ifstream file(customerPath);
     if (!file) return;
 
     Customer customer;
@@ -42,7 +43,7 @@ void CustomerADT::loadCustomers() {
 }
 
 void CustomerADT::saveCustomers() {
-    ofstream file("customers.txt");
+    ofstream file(customerPath);
     for (const auto& customer : customers) {
         file << customer.id << endl
              << customer.name << endl

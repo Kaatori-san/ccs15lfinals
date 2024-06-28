@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <direct.h>
 #include <string>
 #include <vector>
 using namespace std;
@@ -28,6 +29,7 @@ public:
     const vector<Book>& getBooks() const;
 
 private:
+    const char* bookPath = "./data/books.txt";
     vector<Book> books;
     int getNextID();
     void loadBooks();
@@ -41,7 +43,7 @@ int BookADT::getNextID() {
 }
 
 void BookADT::loadBooks() {
-    ifstream file("books.txt");
+    ifstream file(bookPath);
     if (!file) return;
 
     Book book;
@@ -53,7 +55,8 @@ void BookADT::loadBooks() {
 }
 
 void BookADT::saveBooks() {
-    ofstream file("books.txt");
+    _mkdir("./data");
+    ofstream file(bookPath);
     for (const auto& book : books) {
         file << book.id << endl
              << book.title << endl

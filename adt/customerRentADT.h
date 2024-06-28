@@ -21,13 +21,14 @@ private:
         vector<int> bookIds;
     };
 
+    const char* rentalPath = "./data/rentals.txt";
     vector<Rental> rentals;
     void loadRentals();
     void saveRentals();
 };
 
 void CustomerRentADT::loadRentals() {
-    ifstream file("rentals.txt");
+    ifstream file(rentalPath);
     if (!file) return;
 
     Rental rental;
@@ -42,7 +43,7 @@ void CustomerRentADT::loadRentals() {
 }
 
 void CustomerRentADT::saveRentals() {
-    ofstream file("rentals.txt");
+    ofstream file(rentalPath);
     for (const auto& rental : rentals) {
         file << rental.customerId;
         for (const auto& bookId : rental.bookIds) {
