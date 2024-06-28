@@ -6,13 +6,11 @@ using namespace std;
 
 int main() {
     int choice;
-    BookADT myBook;                  // BookADT to manage books
-    CustomerADT myCustomer;          // CustomerADT to manage customers
-    CustomerRentADT myRental;        // CustomerRentADT to manage rentals
+    BookADT myBook;
+    CustomerADT myCustomer;
+    CustomerRentADT myRental;
 
-    // Main menu loop
     do {
-        // Display main menu options
         cout << "[1] New Book" << endl;
         cout << "[2] Rent a Book" << endl;
         cout << "[3] Return a Book" << endl;
@@ -22,37 +20,25 @@ int main() {
         cout << "[7] Customer Maintenance" << endl;
         cout << "[8] Exit Program" << endl;
         cout << "Enter your choice: ";
-        cin >> choice;  // Input user choice
+        cin >> choice; 
 
-        // Process user choice using switch statement
         switch (choice) {
-            case 1: {
-                // Add a new book
+            case 1:
                 myBook.newBook();
                 break;
-            }
-            case 2: {
-                // Rent a book
+            case 2:
                 myRental.rentBook(myBook);
                 break;
-            }
-            case 3: {
-                // Return a rented book
+            case 3:
                 myRental.returnBook(myBook);
                 break;
-            }
-            case 4: {
-                // Show details of a specific book
+            case 4:
                 myBook.showBookDetails();
                 break;
-            }
-            case 5: {
-                // Display details of all books
+            case 5:
                 myBook.displayAllBooks();
                 break;
-            }
             case 6: {
-                // Check availability of a book 
                 cout << "Check Book Availability\nBook Title: ";
                 cin.ignore();
                 string title;
@@ -65,7 +51,6 @@ int main() {
                 break;
             }
             case 7: {
-                // Customer maintenance submenu
                 cout << "[1] Add Customer" << endl;
                 cout << "[2] Show Customer Details" << endl;
                 cout << "[3] Print All Customers" << endl;
@@ -73,35 +58,27 @@ int main() {
                 int subChoice;
                 cin >> subChoice;
                 switch (subChoice) {
-                    case 1: {
-                        // Add a new customer
+                    case 1:
                         myCustomer.addCustomer();
                         break;
-                    }
-                    case 2: {
-                        // Show details of a specific customer
+                    case 2:
                         myCustomer.showCustomerDetails();
                         break;
-                    }
-                    case 3: {
-                        // Print details of all customers
+                    case 3:
                         myCustomer.printAllCustomers();
                         break;
-                    }
                     default:
                         cout << "Invalid input. Please try again." << endl;
                 }
                 break;
             }
             case 8:
-                // Exit the program
-                cout << "Exit Program" << endl;
+                cout << "Exiting Program." << endl;
                 break;
             default:
-                // Handle invalid input
                 cout << "Invalid input. Please try again." << endl;
         }
-    } while (choice != 8);  // Repeat until user chooses to exit
+    } while (choice != 8);
 
     return 0;
 }
