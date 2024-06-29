@@ -7,14 +7,16 @@
 #include <vector>
 
 #ifdef _WIN32
-#include <direct.h>  // For _mkdir on Windows
+#include <direct.h>  
 #else
-#include <sys/stat.h> // For mkdir on Unix/Linux
+#include <sys/stat.h> 
 #endif
 
 using namespace std;
 
-// Declaration of the CustomerADT class
+
+
+// [7] Customer Maintenance
 class CustomerADT {
 public:
     void addCustomer();             // Add a new customer 
@@ -29,22 +31,20 @@ private:
         string address;  // Address of the customer
     };
 
-    const char* customerPath = "./data/customers.txt";   // Path to the file storing customer data
-    vector<Customer> customers;                         // Vector to store all customers
+    const char* customerPath = "./data/customers.txt";   // Text File for Customers
+    vector<Customer> customers;                        
 
-    int getNextID();          // Get the next available ID for a new customer, if 1 is taken, 2 will be given etc
+    int getNextID();          // Get the next available ID for a new customer
     void loadCustomers();     // Load customers data from file
     void saveCustomers();     // Save customers data to file
 };
 
-// Member function definitions
 
-// Get the next available ID for a new customer, 1 taken, 2 given
+
 int CustomerADT::getNextID() {
     return customers.empty() ? 1 : customers.back().id + 1;
 }
 
-// Load customers data from file into memory
 void CustomerADT::loadCustomers() {
     ifstream file(customerPath);
     if (!file) return;  // If file cannot be opened, return without loading
@@ -57,17 +57,16 @@ void CustomerADT::loadCustomers() {
     file.close();
 }
 
-// Save current customers data from memory to file
+
+
 void CustomerADT::saveCustomers() {
 #ifdef _WIN32
-    _mkdir("./data");  // Create directory if not exist (Windows)
+    _mkdir("./data");    // DIRECTORY
 #else
-    mkdir("./data", 0777);  // Create directory if not exist (Unix/Linux)
+    mkdir("./data", 0777);  
 #endif
 
-
     ofstream file(customerPath);
-    // Write each customer's data from the customers vector to file
     for (const auto& customer : customers) {
         file << customer.id << endl
              << customer.name << endl
@@ -76,30 +75,30 @@ void CustomerADT::saveCustomers() {
     file.close();
 }
 
-// TO DO: REWRITE THIS WHOLE SHIZZZ
-void CustomerADT::addCustomer() {
-    customers.clear(); // Clear existing customer data
-    loadCustomers();   // Load existing customers data
+
+
+void CustomerADT::addCustomer() {   // [1] Add Customer content
+    customers.clear(); 
+    loadCustomers();   
 
     Customer customer;
-    customer.id = getNextID();  // Assign next available ID
-    // Prompt user for new customer details
+    customer.id = getNextID();  
     cout << "Add Customer\nName: ";
     cin.ignore();
     getline(cin, customer.name);
     cout << "Address: ";
     getline(cin, customer.address);
 
-    customers.push_back(customer);  // Add new customer to vector
-    saveCustomers();  // Save updated customers data to file
+    customers.push_back(customer); 
+    saveCustomers();  
     cout << "New Customer Added!" << endl;
 }
 
 
-// Show details of a specific customer
-void CustomerADT::showCustomerDetails() {
+
+void CustomerADT::showCustomerDetails() {    // [2]  Show Customer Details content
     customers.clear();
-    loadCustomers();  // Load existing customers data
+    loadCustomers();  
     
     int id;
     cout << "Show Customer Details\nCustomer ID: ";
@@ -115,10 +114,11 @@ void CustomerADT::showCustomerDetails() {
     cout << "Customer ID Not Found!" << endl;
 }
 
-// Print details of all customers in the system
-void CustomerADT::printAllCustomers() {
+
+
+void CustomerADT::printAllCustomers() {     // [3] Print All Customers content
     customers.clear();
-    loadCustomers();  // Load existing customers data
+    loadCustomers();  
 
     for (const auto& customer : customers) {
         cout << "ID: " << customer.id << "\nName: " << customer.name << "\nAddress: " << customer.address << endl;
