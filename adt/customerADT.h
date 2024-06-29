@@ -65,6 +65,7 @@ void CustomerADT::saveCustomers() {
     mkdir("./data", 0777);  // Create directory if not exist (Unix/Linux)
 #endif
 
+
     ofstream file(customerPath);
     // Write each customer's data from the customers vector to file
     for (const auto& customer : customers) {
@@ -75,9 +76,10 @@ void CustomerADT::saveCustomers() {
     file.close();
 }
 
-// Add a new customer to the system
+// TO DO: REWRITE THIS WHOLE SHIZZZ
 void CustomerADT::addCustomer() {
-    loadCustomers();  // Load existing customers data
+    customers.clear(); // Clear existing customer data
+    loadCustomers();   // Load existing customers data
 
     Customer customer;
     customer.id = getNextID();  // Assign next available ID
@@ -93,13 +95,16 @@ void CustomerADT::addCustomer() {
     cout << "New Customer Added!" << endl;
 }
 
+
 // Show details of a specific customer
 void CustomerADT::showCustomerDetails() {
+    customers.clear();
     loadCustomers();  // Load existing customers data
-
+    
     int id;
     cout << "Show Customer Details\nCustomer ID: ";
     cin >> id;
+    cin.ignore();
     // Search for the customer by ID in the customers vector and display details
     for (const auto& customer : customers) {
         if (customer.id == id) {
@@ -112,6 +117,7 @@ void CustomerADT::showCustomerDetails() {
 
 // Print details of all customers in the system
 void CustomerADT::printAllCustomers() {
+    customers.clear();
     loadCustomers();  // Load existing customers data
 
     for (const auto& customer : customers) {
