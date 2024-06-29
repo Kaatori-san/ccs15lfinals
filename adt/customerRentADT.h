@@ -87,8 +87,6 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
     cin.ignore();
     getline(cin, bookTitle);
 
-
-
     if (bookADT.checkBookAvailability(bookTitle)) {
         int bookId = -1;
         const auto& books = bookADT.getBooks();
@@ -98,8 +96,6 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
                 break;
             }
         }
-
-
 
         if (bookId != -1) {
             for (auto& rental : rentals) {
@@ -111,8 +107,6 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
                     return;
                 }
             }
-
-
 
             Rental newRental;
             newRental.customerId = customerId;

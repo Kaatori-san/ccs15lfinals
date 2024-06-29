@@ -46,49 +46,55 @@ public:
         cout << "New Book Added!" << endl;
     }
 
-    void rentBook() {  // TO DO: rentBook does not reflect on newBook. Text files works on being reflected by newBook, but not the program itself
+    void rentBook() {  
         loadBooks(); 
 
+        char choice;
         string title;
-        cout << "Rent Book\nBook Title: ";
+        bool bookFound = false;
+        cout << "Rent Book" << endl;
+        cout << "Book Title: ";
         cin.ignore();
         getline(cin, title);
         for (auto& book : books) {
             if (book.title == title) {
-                cout << "Book Title Found! Do you want to rent the book? Y/N: ";
-                char choice;
+                bookFound = true;
+                cout << "Book Title Found!\nDo you want to rent the book? Y/N: ";
                 cin >> choice;
                 if (choice == 'Y' || choice == 'y') {
                     if (book.copies > 0) {
                         book.copies--; 
                         saveBooks(); 
                         cout << "Book Rented!" << endl;
-                    } else {
-                        cout << "Book Not Available!" << endl;
                     }
                 }
                 return;
+            } else if (!bookFound){
+                cout << "Book Title Not Found!" << endl;
             }
         }
-        cout << "Book Title Not Found!" << endl;
     }
  
-    void returnBook() {  // TO DO: It puts both the text of "Book Returned!" and "Book Title Not Found!" not sure if It's actually been returned or not.
+    void returnBook() {  
         loadBooks();  
 
         string title;
+        bool bookFound = false;
         cout << "Return Book\nBook Title: ";
         cin.ignore();
         getline(cin, title);
         for (auto& book : books) {
             if (book.title == title) {
+                bookFound = true;
                 book.copies++;  
                 saveBooks();  
                 cout << "Book Returned!" << endl;
                 return;
             }
         }
-        cout << "Book Title Not Found!" << endl;
+        if (!bookFound){
+            cout << "Book Title Not Found!" << endl;
+        }
     }
 
     void showBookDetails() {
@@ -98,14 +104,18 @@ public:
         cout << "Show Book Details\nBook Title: ";
         cin.ignore();
         getline(cin, title);
+        bool bookFound = false;
         for (const auto& book : books) {
             if (book.title == title) {
+                bookFound = true;
                 cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
                      << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
                 return;
             }
         }
-        cout << "Book Title Not Found!" << endl;
+        if (!bookFound){
+            cout << "Book Title Not Found!" << endl;
+        }
     }
 
     void displayAllBooks() {   
@@ -117,7 +127,7 @@ public:
         }
     }
 
-    bool checkBookAvailability(const string& title) {   // TO DO: Even after renting a book, checkBookAvailability still says the Book is still available
+    bool checkBookAvailability(const string& title) {   
         loadBooks();  
 
         for (const auto& book : books) {
@@ -137,14 +147,14 @@ private:
     vector<Book> books;                        
 
     int getNextID() {
-        return books.empty() ? 1 : books.back().id + 1;
+        return books.empty()? 1 : books.back().id + 1;
     }
 
     void loadBooks() {
         ifstream file(bookPath);
         if (!file) return; 
 
-        books.clear();  
+        books.clear();
         Book book;
         while (file >> book.id >> ws && getline(file, book.title) && getline(file, book.genre) &&
                getline(file, book.publisher) && file >> book.copies >> ws) {
@@ -154,11 +164,11 @@ private:
     }
 
     void saveBooks() {
-#ifdef _WIN32
+        #ifdef _WIN32
         _mkdir("./data"); 
-#else
+        #else
         mkdir("./data", 0777);  
-#endif
+        #endif
 
         ofstream file(bookPath);
         for (const auto& book : books) {

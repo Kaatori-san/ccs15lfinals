@@ -27,10 +27,10 @@ int main() {
                 myBook.newBook();
                 break;
             case 2:
-                myRental.rentBook(myBook);
+                myBook.rentBook();
                 break;
             case 3:
-                myRental.returnBook(myBook);
+                myBook.returnBook();
                 break;
             case 4:
                 myBook.showBookDetails();
