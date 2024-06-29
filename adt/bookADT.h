@@ -7,9 +7,9 @@
 #include <vector>
 
 #ifdef _WIN32
-#include <direct.h>  // For _mkdir on Windows
+#include <direct.h> 
 #else
-#include <sys/stat.h> // For mkdir on Unix/Linux
+#include <sys/stat.h> 
 #endif
 
 using namespace std;
@@ -27,11 +27,10 @@ struct Book {
 class BookADT {
 public:
     void newBook() {
-        loadBooks();  // Load existing books data
+        loadBooks();  
 
         Book book;
-        book.id = getNextID();  // Assign next available ID
-        // Prompt user for new book details
+        book.id = getNextID(); 
         cout << "Add New Book\nBook Title: ";
         cin.ignore();
         getline(cin, book.title);
@@ -42,29 +41,27 @@ public:
         cout << "Number of Copies: ";
         cin >> book.copies;
 
-        books.push_back(book);  // Add new book to vector
-        saveBooks();  // Save updated books data to file
+        books.push_back(book);  
+        saveBooks(); 
         cout << "New Book Added!" << endl;
     }
 
-    void rentBook() {
-        loadBooks();  // Load existing books data
+    void rentBook() {  // TO DO: rentBook does not reflect on newBook. Text files works on being reflected by newBook, but not the program itself
+        loadBooks(); 
 
         string title;
         cout << "Rent Book\nBook Title: ";
         cin.ignore();
         getline(cin, title);
-        // Search for the book by title in the books vector
         for (auto& book : books) {
             if (book.title == title) {
-                // Prompt user to rent the book if available copies exist
                 cout << "Book Title Found! Do you want to rent the book? Y/N: ";
                 char choice;
                 cin >> choice;
                 if (choice == 'Y' || choice == 'y') {
                     if (book.copies > 0) {
-                        book.copies--;  // Decrease available copies
-                        saveBooks();  // Save updated books data to file
+                        book.copies--; 
+                        saveBooks(); 
                         cout << "Book Rented!" << endl;
                     } else {
                         cout << "Book Not Available!" << endl;
@@ -75,19 +72,18 @@ public:
         }
         cout << "Book Title Not Found!" << endl;
     }
-
-    void returnBook() {
-        loadBooks();  // Load existing books data
+ 
+    void returnBook() {  // TO DO: It puts both the text of "Book Returned!" and "Book Title Not Found!" not sure if It's actually been returned or not.
+        loadBooks();  
 
         string title;
         cout << "Return Book\nBook Title: ";
         cin.ignore();
         getline(cin, title);
-        // Search for the book by title in the books vector
         for (auto& book : books) {
             if (book.title == title) {
-                book.copies++;  // Increase available copies
-                saveBooks();  // Save updated books data to file
+                book.copies++;  
+                saveBooks();  
                 cout << "Book Returned!" << endl;
                 return;
             }
@@ -96,13 +92,12 @@ public:
     }
 
     void showBookDetails() {
-        loadBooks();  // Load existing books data
+        loadBooks(); 
 
         string title;
         cout << "Show Book Details\nBook Title: ";
         cin.ignore();
         getline(cin, title);
-        // Search for the book by title in the books vector and display details
         for (const auto& book : books) {
             if (book.title == title) {
                 cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
@@ -113,8 +108,8 @@ public:
         cout << "Book Title Not Found!" << endl;
     }
 
-    void displayAllBooks() {
-        loadBooks();  // Load existing books data
+    void displayAllBooks() {   
+        loadBooks();  
 
         for (const auto& book : books) {
             cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
@@ -122,16 +117,15 @@ public:
         }
     }
 
-    bool checkBookAvailability(const string& title) {
-        loadBooks();  // Load existing books data
+    bool checkBookAvailability(const string& title) {   // TO DO: Even after renting a book, checkBookAvailability still says the Book is still available
+        loadBooks();  
 
-        // Search for the book by title in the books vector
         for (const auto& book : books) {
             if (book.title == title && book.copies > 0) {
-                return true;  // Book found and available
+                return true;  
             }
         }
-        return false;  // Book not found or not available
+        return false;  
     }
 
     const vector<Book>& getBooks() const {
@@ -139,8 +133,8 @@ public:
     }
 
 private:
-    const char* bookPath = "./data/books.txt";  // File storing books data
-    vector<Book> books;                         // Vector to store all books
+    const char* bookPath = "./data/books.txt";  
+    vector<Book> books;                        
 
     int getNextID() {
         return books.empty() ? 1 : books.back().id + 1;
@@ -148,11 +142,10 @@ private:
 
     void loadBooks() {
         ifstream file(bookPath);
-        if (!file) return;  // If file cannot be opened, return without loading
+        if (!file) return; 
 
-        books.clear();  // Clear existing books
+        books.clear();  
         Book book;
-        // Read each book's data from file and store in the books vector
         while (file >> book.id >> ws && getline(file, book.title) && getline(file, book.genre) &&
                getline(file, book.publisher) && file >> book.copies >> ws) {
             books.push_back(book);
@@ -162,13 +155,12 @@ private:
 
     void saveBooks() {
 #ifdef _WIN32
-        _mkdir("./data");  // Create directory if not exist (Windows)
+        _mkdir("./data"); 
 #else
-        mkdir("./data", 0777);  // Create directory if not exist (Unix/Linux)
+        mkdir("./data", 0777);  
 #endif
 
         ofstream file(bookPath);
-        // Write each book's data from the books vector to file
         for (const auto& book : books) {
             file << book.id << endl
                  << book.title << endl
