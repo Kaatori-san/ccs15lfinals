@@ -16,6 +16,8 @@
 
 using namespace std;
 
+
+
 class CustomerRentADT {
 public:
     void rentBook(BookADT& bookADT);       
@@ -28,12 +30,13 @@ private:
         vector<int> bookIds;    
     };
 
-    const char* rentalPath = "./data/rentals.txt";   
+    const char* rentalPath = "./data/rentals.txt";    // Text file for renting books 
     vector<Rental> rentals;                         
 
     void loadRentals();     
     void saveRentals();    
 };
+
 
 
 void CustomerRentADT::loadRentals() {
@@ -51,9 +54,11 @@ void CustomerRentADT::loadRentals() {
     file.close();
 }
 
+
+
 void CustomerRentADT::saveRentals() {
 #ifdef _WIN32
-    _mkdir("./data");  
+    _mkdir("./data");     // DIRECTORY
 #else
     mkdir("./data", 0777); 
 #endif
@@ -69,6 +74,8 @@ void CustomerRentADT::saveRentals() {
     file.close();
 }
 
+
+
 void CustomerRentADT::rentBook(BookADT& bookADT) {  
     loadRentals();  
 
@@ -80,6 +87,8 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
     cin.ignore();
     getline(cin, bookTitle);
 
+
+
     if (bookADT.checkBookAvailability(bookTitle)) {
         int bookId = -1;
         const auto& books = bookADT.getBooks();
@@ -89,6 +98,8 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
                 break;
             }
         }
+
+
 
         if (bookId != -1) {
             for (auto& rental : rentals) {
@@ -100,6 +111,8 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
                     return;
                 }
             }
+
+
 
             Rental newRental;
             newRental.customerId = customerId;
@@ -114,7 +127,8 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
     }
 }
 
-// Return a book from a customer
+
+
 void CustomerRentADT::returnBook(BookADT& bookADT) {  // TO DO: returnBook does not reflect on rentBook in bookADT.h, so It keeps saying "Book Returned!" and "Book Title Not Found in Customer's Rentals!"
     loadRentals();  
 
@@ -145,6 +159,8 @@ void CustomerRentADT::returnBook(BookADT& bookADT) {  // TO DO: returnBook does 
     cout << "Book Title Not Found in Customer's Rentals!" << endl;
 }
 
+
+
 void CustomerRentADT::printCustomerRentals() {
     loadRentals();  
 
@@ -162,5 +178,7 @@ void CustomerRentADT::printCustomerRentals() {
     }
     cout << "Customer ID Not Found!" << endl;
 }
+
+
 
 #endif
