@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
     int choice;
-    BookADT myBook;
+    BookADT myBook; 
     CustomerADT myCustomer;
     CustomerRentADT myRental;
 

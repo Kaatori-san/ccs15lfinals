@@ -44,36 +44,52 @@ public:
         books.push_back(book);  
         saveBooks(); 
         cout << "New Book Added!" << endl;
+
+        cout << "Wait for user input..." << endl;
+        cin.ignore();
     }
 
-    void rentBook() {  
-        loadBooks(); 
+    void rentBook() {
+    loadBooks(); 
 
-        char choice;
-        string title;
-        bool bookFound = false;
-        cout << "Rent Book" << endl;
-        cout << "Book Title: ";
-        cin.ignore();
-        getline(cin, title);
-        for (auto& book : books) {
-            if (book.title == title) {
-                bookFound = true;
-                cout << "Book Title Found!\nDo you want to rent the book? Y/N: ";
-                cin >> choice;
-                if (choice == 'Y' || choice == 'y') {
-                    if (book.copies > 0) {
-                        book.copies--; 
-                        saveBooks(); 
-                        cout << "Book Rented!" << endl;
-                    }
+    string title;
+    bool bookFound = false;
+    cout << "Rent Book" << endl;
+    cout << "Book Title: ";
+    cin.ignore();  // Ignore the newline character left in the input buffer
+    getline(cin, title);
+    for (auto& book : books) {
+        if (book.title == title) {
+            bookFound = true;
+            char choice;
+            cout << "Book Title Found!\nDo you want to rent the book? Y/N: ";
+            cin >> choice;
+            if (choice == 'Y' || choice == 'y') {
+                if (book.copies > 0) {
+                    book.copies--; 
+                    saveBooks(); 
+                    cout << "Book Rented!" << endl;
+
+                    cout << "Wait for user input..." << endl;
+                    cin.ignore();
+                } else {
+                    cout << "No copies available for rent." << endl;
+
+                    cout << "Wait for user input..." << endl;
+                    cin.ignore();
                 }
-                return;
-            } else if (!bookFound){
-                cout << "Book Title Not Found!" << endl;
             }
+            break;
         }
     }
+    if (!bookFound) {
+        cout << "Book Title Not Found!" << endl;
+
+        cout << "Wait for user input..." << endl;
+        cin.ignore();
+    }
+}
+
  
     void returnBook() {  
         loadBooks();  
@@ -89,11 +105,15 @@ public:
                 book.copies++;  
                 saveBooks();  
                 cout << "Book Returned!" << endl;
+                cout << "Wait for user input..." << endl;
+                cin.ignore();
                 return;
             }
         }
         if (!bookFound){
             cout << "Book Title Not Found!" << endl;
+            cout << "Wait for user input..." << endl;
+            cin.ignore();
         }
     }
 
@@ -108,13 +128,16 @@ public:
         for (const auto& book : books) {
             if (book.title == title) {
                 bookFound = true;
-                cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
-                     << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
+                cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
+                cout << "Wait for user input..." << endl;
+                cin.ignore();
                 return;
             }
         }
         if (!bookFound){
             cout << "Book Title Not Found!" << endl;
+            cout << "Wait for user input..." << endl;
+            cin.ignore();
         }
     }
 
@@ -125,6 +148,8 @@ public:
             cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
                  << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
         }
+        cout << "Wait for user input..." << endl;
+        cin.ignore();
     }
 
     bool checkBookAvailability(const string& title) {   
@@ -152,34 +177,57 @@ private:
 
     void loadBooks() {
         ifstream file(bookPath);
-        if (!file) return; 
+        if (!file) {
+            cout << "Unable to open file for reading." << endl;
+            return; 
+        }
 
         books.clear();
         Book book;
-        while (file >> book.id >> ws && getline(file, book.title) && getline(file, book.genre) &&
-               getline(file, book.publisher) && file >> book.copies >> ws) {
-            books.push_back(book);
+        string line;
+        while (getline(file, line)) {
+            if (line.find("ID: ") == 0) {
+                book.id = stoi(line.substr(4));
+            } else if (line.find("Title: ") == 0) {
+                book.title = line.substr(7);
+            } else if (line.find("Genre: ") == 0) {
+                book.genre = line.substr(7);
+            } else if (line.find("Publisher: ") == 0) {
+                book.publisher = line.substr(11);
+            } else if (line.find("Copies: ") == 0) {
+                book.copies = stoi(line.substr(8));
+            } else if (line == "---") {
+                books.push_back(book);  // Add the book to the vector
+            }
         }
         file.close();
     }
 
     void saveBooks() {
-        #ifdef _WIN32
-        _mkdir("./data"); 
-        #else
-        mkdir("./data", 0777);  
-        #endif
+    #ifdef _WIN32
+    _mkdir("./data"); 
+    #else
+    mkdir("./data", 0777);  
+    #endif
 
-        ofstream file(bookPath);
-        for (const auto& book : books) {
-            file << book.id << endl
-                 << book.title << endl
-                 << book.genre << endl
-                 << book.publisher << endl
-                 << book.copies << endl;
-        }
-        file.close();
+    ofstream file(bookPath);
+    if (!file) {
+        cout << "Unable to open file for writing." << endl;
+        return;
     }
+
+    for (const auto& book : books) {
+        file << "ID: " << book.id << '\n'
+             << "Title: " << book.title << '\n'
+             << "Genre: " << book.genre << '\n'
+             << "Publisher: " << book.publisher << '\n'
+             << "Copies: " << book.copies << '\n'
+             << "---\n";  // Separator between books
+    }
+
+    file.close();
+}
+
 };
 
 #endif
