@@ -4,6 +4,10 @@
 #include "adt/customerRentADT.h"
 using namespace std;
 
+void clrscr() { 
+    cout << "\033[2J\033[1;1H";
+    }
+
 int main() {
     int choice;
     BookADT myBook; 
@@ -11,6 +15,7 @@ int main() {
     CustomerRentADT myRental;
 
     do {
+        clrscr();
         cout << "[1] New Book" << endl;
         cout << "[2] Rent a Book" << endl;
         cout << "[3] Return a Book" << endl;
@@ -23,21 +28,31 @@ int main() {
         cin >> choice; 
 
         switch (choice) {
-            case 1:
+            case 1:{
+                clrscr();
                 myBook.newBook();
                 break;
-            case 2:
+            }
+            case 2:{
+                clrscr();
                 myBook.rentBook();
                 break;
-            case 3:
+            }
+            case 3:{
+                clrscr();
                 myBook.returnBook();
                 break;
-            case 4:
+            }
+            case 4:{
+                clrscr();
                 myBook.showBookDetails();
-                break;
-            case 5:
+                break;   
+            }
+            case 5:{
+                clrscr();
                 myBook.displayAllBooks();
                 break;
+            }
             case 6: {
                 cout << "Check Book Availability\nBook Title: ";
                 cin.ignore();
@@ -72,9 +87,11 @@ int main() {
                 }
                 break;
             }
-            case 8:
+            case 8:{
+                clrscr();
                 cout << "Exiting Program." << endl;
                 break;
+            }
             default:
                 cout << "Invalid input. Please try again." << endl;
         }

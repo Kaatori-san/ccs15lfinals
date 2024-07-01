@@ -26,6 +26,10 @@ struct Book {
 // BookADT class declaration
 class BookADT {
 public:
+    void waitForUserInput() {
+        cout << "Press enter to continue...";
+        cin.ignore();
+    }
     void newBook() {
         loadBooks();  
 
@@ -69,14 +73,10 @@ public:
                     book.copies--; 
                     saveBooks(); 
                     cout << "Book Rented!" << endl;
-
-                    cout << "Wait for user input..." << endl;
-                    cin.ignore();
+                    waitForUserInput();
                 } else {
                     cout << "No copies available for rent." << endl;
-
-                    cout << "Wait for user input..." << endl;
-                    cin.ignore();
+                    waitForUserInput();
                 }
             }
             break;
@@ -84,9 +84,7 @@ public:
     }
     if (!bookFound) {
         cout << "Book Title Not Found!" << endl;
-
-        cout << "Wait for user input..." << endl;
-        cin.ignore();
+        waitForUserInput();
     }
 }
 
@@ -105,15 +103,13 @@ public:
                 book.copies++;  
                 saveBooks();  
                 cout << "Book Returned!" << endl;
-                cout << "Wait for user input..." << endl;
-                cin.ignore();
+                waitForUserInput();
                 return;
             }
         }
         if (!bookFound){
             cout << "Book Title Not Found!" << endl;
-            cout << "Wait for user input..." << endl;
-            cin.ignore();
+            waitForUserInput();
         }
     }
 
@@ -129,15 +125,13 @@ public:
             if (book.title == title) {
                 bookFound = true;
                 cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
-                cout << "Wait for user input..." << endl;
-                cin.ignore();
+                waitForUserInput();
                 return;
             }
         }
         if (!bookFound){
             cout << "Book Title Not Found!" << endl;
-            cout << "Wait for user input..." << endl;
-            cin.ignore();
+            waitForUserInput();
         }
     }
 
@@ -148,7 +142,7 @@ public:
             cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
                  << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
         }
-        cout << "Wait for user input..." << endl;
+        waitForUserInput();
         cin.ignore();
     }
 
@@ -178,7 +172,7 @@ private:
     void loadBooks() {
         ifstream file(bookPath);
         if (!file) {
-            cout << "Unable to open file for reading." << endl;
+            cout << "Unable to open file." << endl;
             return; 
         }
 
@@ -212,7 +206,7 @@ private:
 
     ofstream file(bookPath);
     if (!file) {
-        cout << "Unable to open file for writing." << endl;
+        cout << "Unable to open file." << endl;
         return;
     }
 

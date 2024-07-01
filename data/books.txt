@@ -10,3 +10,9 @@ Genre: scifi
 Publisher: dc
 Copies: 5
 ---
+ID: 3
+Title: batman
+Genre: scifi
+Publisher: dc
+Copies: 10
+---
