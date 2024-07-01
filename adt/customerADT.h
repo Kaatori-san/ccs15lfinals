@@ -63,6 +63,27 @@ void CustomerADT::loadCustomers() {
     file.close();
 }
 
+void CustomerADT::appendCustomer(const Customer& customer) {
+#ifdef _WIN32
+    _mkdir("./data"); // DIRECTORY
+#else
+    mkdir("./data", 0777);
+#endif
+
+    ofstream file(customerPath, ios::app); // Open file in append mode
+    if (!file) {
+        cout << "Unable to open file for writing." << endl;
+        return;
+    }
+
+    file << "Customer ID: " << customer.id << '\n'
+         << "Name: " << customer.name << '\n'
+         << "Address: " << customer.address << '\n'
+         << "---\n"; // Separator between customers
+
+    file.close();
+}
+
 void CustomerADT::addCustomer() {   // [1] Add Customer content
     loadCustomers();   
 
