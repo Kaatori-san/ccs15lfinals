@@ -65,9 +65,9 @@ void CustomerRentADT::saveRentals() {
 
     ofstream file(rentalPath);
     for (const auto& rental : rentals) {
-        file << rental.customerId;
+        file << "Customer ID: " << rental.customerId;
         for (const auto& bookId : rental.bookIds) {
-            file << " " << bookId;
+            file << "Book ID: " << bookId;
         }
         file << endl;
     }
@@ -87,6 +87,8 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
     cin.ignore();
     getline(cin, bookTitle);
 
+
+
     if (bookADT.checkBookAvailability(bookTitle)) {
         int bookId = -1;
         const auto& books = bookADT.getBooks();
@@ -96,6 +98,8 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
                 break;
             }
         }
+
+
 
         if (bookId != -1) {
             for (auto& rental : rentals) {
@@ -107,6 +111,8 @@ void CustomerRentADT::rentBook(BookADT& bookADT) {
                     return;
                 }
             }
+
+
 
             Rental newRental;
             newRental.customerId = customerId;
