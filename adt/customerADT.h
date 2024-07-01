@@ -5,41 +5,38 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "bookADT.h"
+#include "customerRentADT.h"
 
 #ifdef _WIN32
-#include <direct.h>  
+#include <direct.h>
 #else
-#include <sys/stat.h> 
+#include <sys/stat.h>
 #endif
 
 using namespace std;
 
-
-
-// [7] Customer Maintenance
 class CustomerADT {
 public:
-    void addCustomer();             // Add a new customer 
-    void showCustomerDetails();     // Show details of a specific customer
-    void printAllCustomers();       // Print details of all customers inputed in the text file
+    void addCustomer();             
+    void showCustomerDetails();     
+    void printAllCustomers();       
 
 private:
-    // Define a struct to represent a Customer
     struct Customer {
-        int id;          // Unique identifier for the customer, starts from 1 to idk
-        string name;     // Name of the customer
-        string address;  // Address of the customer
+        int id;         
+        string name;     
+        string address;  
     };
 
-    const char* customerPath = "./data/customers.txt";   // Text File for Customers
+    const char* customerPath = "./data/customers.txt";   
     vector<Customer> customers;                        
 
-    int getNextID();          // Get the next available ID for a new customer
-    void loadCustomers();     // Load customers data from file
-    void saveCustomers();     // Save customers data to file
+    int getNextID();         
+    void loadCustomers();     
+    void saveCustomers();    
+    void appendCustomer(const Customer& customer); // Function to append a new customer to the file
 };
-
-
 
 int CustomerADT::getNextID() {
     return customers.empty() ? 1 : customers.back().id + 1;
@@ -47,38 +44,47 @@ int CustomerADT::getNextID() {
 
 void CustomerADT::loadCustomers() {
     ifstream file(customerPath);
-    if (!file) return;  // If file cannot be opened, return without loading
+    if (!file) return;  
 
+    customers.clear();
     Customer customer;
-    // Read each customer's data from file and store in the customers vector
-    while (file >> customer.id >> ws && getline(file, customer.name) && getline(file, customer.address)) {
-        customers.push_back(customer);
+    string line;
+    while (getline(file, line)) {
+        if (line.find("Customer ID: ") == 0) {
+            customer.id = stoi(line.substr(13));
+        } else if (line.find("Name: ") == 0) {
+            customer.name = line.substr(6);
+        } else if (line.find("Address: ") == 0) {
+            customer.address = line.substr(9);
+        } else if (line == "---") {
+            customers.push_back(customer); // Add the customer to the vector
+        }
     }
     file.close();
 }
 
-
-
-void CustomerADT::saveCustomers() {
+void CustomerADT::appendCustomer(const Customer& customer) {
 #ifdef _WIN32
-    _mkdir("./data");    // DIRECTORY
+    _mkdir("./data"); // DIRECTORY
 #else
-    mkdir("./data", 0777);  
+    mkdir("./data", 0777);
 #endif
 
-    ofstream file(customerPath);
-    for (const auto& customer : customers) {
-        file << customer.id << endl
-             << customer.name << endl
-             << customer.address << endl;
+    ofstream file(customerPath, ios::app); // Open file in append mode
+    if (!file) {
+        cout << "Unable to open file for writing." << endl;
+        return;
     }
+
+    file << "Customer ID: " << customer.id << '\n'
+         << "Name: " << customer.name << '\n'
+         << "Address: " << customer.address << '\n'
+         << "---\n"; // Separator between customers
+
     file.close();
 }
 
-
-
 void CustomerADT::addCustomer() {   // [1] Add Customer content
-    customers.clear(); 
     loadCustomers();   
 
     Customer customer;
@@ -90,14 +96,11 @@ void CustomerADT::addCustomer() {   // [1] Add Customer content
     getline(cin, customer.address);
 
     customers.push_back(customer); 
-    saveCustomers();  
+    appendCustomer(customer); // Append the new customer to the file
     cout << "New Customer Added!" << endl;
 }
 
-
-
 void CustomerADT::showCustomerDetails() {    // [2]  Show Customer Details content
-    customers.clear();
     loadCustomers();  
     
     int id;
@@ -114,15 +117,29 @@ void CustomerADT::showCustomerDetails() {    // [2]  Show Customer Details conte
     cout << "Customer ID Not Found!" << endl;
 }
 
-
-
 void CustomerADT::printAllCustomers() {     // [3] Print All Customers content
-    customers.clear();
     loadCustomers();  
 
     for (const auto& customer : customers) {
         cout << "ID: " << customer.id << "\nName: " << customer.name << "\nAddress: " << customer.address << endl;
     }
+}
+
+void CustomerADT::saveCustomers() {
+#ifdef _WIN32
+    _mkdir("./data");    // DIRECTORY
+#else
+    mkdir("./data", 0777);  
+#endif
+
+    ofstream file(customerPath);
+    for (const auto& customer : customers) {
+        file << "Customer ID: " << customer.id << '\n'
+             << "Name: " << customer.name << '\n'
+             << "Address: " << customer.address << '\n'
+             << "---\n";  // Separator between customers
+    }
+    file.close();
 }
 
 #endif
