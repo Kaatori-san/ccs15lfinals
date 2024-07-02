@@ -5,6 +5,7 @@
 #include <fstream>  // used for reading and writing files. 
 #include <string>   // used for handling string data, such as storing book details etc 
 #include <vector>   // used to store nad manage the collections of Book in a resizable array-like structure
+#include <conio.h>
 
 #ifdef _WIN32
 #include <direct.h> // mkdir() on Windows
@@ -32,10 +33,8 @@ public:
     }
     void newBook() {  // Adds a new book to the file
         loadBooks();  // Loads existing books from file
-
         Book book;
         book.id = getNextID();  // Generate new ID for the book
-
         // Asks the user for book details
         cout << "Add New Book\nBook Title: ";
         cin.ignore();
@@ -46,13 +45,10 @@ public:
         getline(cin, book.publisher);
         cout << "Number of Copies: ";
         cin >> book.copies;
-
         books.push_back(book);  // adds the new book to the vector
         saveBooks();            // save updated book list to file
         cout << "New Book Added!" << endl;
-
-        cout << "Wait for user input..." << endl;  // waits for the user confirmation
-        cin.ignore();
+        waitForUserInput();
     }
 
     void rentBookByTitle(const string& title) {  // rents a book by decreasing It's available copies. 
@@ -85,17 +81,15 @@ public:
                 book.copies++;  // Increases available copies
                 saveBooks();  
                 cout << "Book Returned!" << endl;
-                waitForUserInput();
                 return;
             }
         }
         if (!bookFound){
             cout << "Book Title Not Found!" << endl;
-            waitForUserInput();
         }
+        waitForUserInput();
     }
 
-    // Displays Details of a Specific Book
     void showBookDetails() {
         loadBooks(); 
 
@@ -111,7 +105,7 @@ public:
                 bookFound = true;
 
                 // This displays the book details if found. 
-                cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
+                cout << endl << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
                 waitForUserInput();
                 return;
             }
@@ -130,7 +124,7 @@ public:
 
             // Displayment details of every book
             cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
-                 << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
+                 << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl << "--------------" << endl;
         }
         waitForUserInput();
         cin.ignore();

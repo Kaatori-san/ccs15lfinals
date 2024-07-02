@@ -5,17 +5,30 @@
 
 using namespace std;
 
-// Function to clear the console screen
-void clrscr() {
-    cout << "\033[2J\033[1;1H";
-}
-
-int main() {
-    int choice;
+int choice;
     BookADT myBook;              // BookADT class
     CustomerADT myCustomer;      // CustomerADT class
     CustomerRentADT myRental;    // CustomerRentADT class
+// Function to clear the console screen
+void clrscr() { // Clear the console screen function
+    cout << "\033[2J\033[1;1H";
+}
+void checkBook() {
+    cout << "Check Book Availability\nBook Title: ";
+    cin.ignore();   // Ignore any leftover newline characters
+    string title;
+    getline(cin, title);
+    if (myBook.checkBookAvailability(title)) {
+        cout << "Book Available!" << endl;   // Check if a book is available for rent
+    } else {
+        cout << "Book Not Available!" << endl;
+    }
+    cout << "Press enter to continue...";
+    cin.ignore();   // Wait for user to press enter before returning to menu
+}
 
+int main() {
+    
     do {
         clrscr();   // Clear the console screen
         // Display main menu options
@@ -65,17 +78,7 @@ int main() {
             }
             case 6: {
                 clrscr();
-                cout << "Check Book Availability\nBook Title: ";
-                cin.ignore();   // Ignore any leftover newline characters
-                string title;
-                getline(cin, title);
-                if (myBook.checkBookAvailability(title)) {
-                    cout << "Book Available!" << endl;   // Check if a book is available for rent
-                } else {
-                    cout << "Book Not Available!" << endl;
-                }
-                cout << "Press enter to continue...";
-                cin.ignore();   // Wait for user to press enter before returning to menu
+                checkBook();   // Call function to check book availability
                 break;
             }
             case 7: {
@@ -84,19 +87,29 @@ int main() {
                 cout << "[1] Add Customer" << endl;
                 cout << "[2] Show Customer Details" << endl;
                 cout << "[3] Print All Customers" << endl;
+                cout << "[4] Back to Main Menu" << endl;
                 cout << "Enter your choice: ";
                 int subChoice;
                 cin >> subChoice;
                 switch (subChoice) {
-                    case 1:
+                    case 1: {
+                        clrscr();
                         myCustomer.addCustomer();    // Call function to add a new customer
                         break;
-                    case 2:
+                    }
+                    case 2: {
+                        clrscr();
                         myCustomer.showCustomerDetails();    // Call function to show details of a customer
                         break;
-                    case 3:
+                    }
+                    case 3: {
+                        clrscr();
                         myCustomer.printAllCustomers();     // Call function to print all customers
                         break;
+                    }
+                    case 4: {   // Exit sub-menu
+                        break;
+                    }
                     default:
                         cout << "Invalid input. Please try again." << endl;
                 }
@@ -110,8 +123,6 @@ int main() {
             default:
                 cout << "Invalid input. Please try again." << endl;
         }
-
-        cin.ignore(); // Clear input buffer before next iteration
     } while (choice != 8);   // Repeat until the user chooses to exit
 
     return 0;

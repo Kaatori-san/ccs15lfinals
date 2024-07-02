@@ -41,6 +41,11 @@ private:
     void printError(const string& msg) {
         cerr << "Error: " << msg << endl;
     }
+    // waitForUserInput();
+    void waitForUserInput() {
+        cout << "Press enter to continue...";
+        cin.ignore();
+    }
 };
 
 int CustomerADT::getNextID() {
@@ -109,6 +114,7 @@ void CustomerADT::addCustomer() {
     customers.push_back(customer);
     appendCustomer(customer);
     cout << "New Customer Added!" << endl;
+    waitForUserInput();
 }
 
 void CustomerADT::showCustomerDetails() {
@@ -133,9 +139,7 @@ void CustomerADT::showCustomerDetails() {
     if (!found) {
         cout << "Customer ID Not Found!" << endl;
     }
-
-    cout << "Press enter to continue...";
-    cin.ignore();
+    waitForUserInput();
 }
 
 void CustomerADT::printAllCustomers() {
@@ -151,8 +155,7 @@ void CustomerADT::printAllCustomers() {
     for (const auto& customer : customers) {
         cout << "ID: " << customer.id << "\nName: " << customer.name << "\nAddress: " << customer.address << endl;
     }
-
-    cout << "Press enter to continue...";
+    waitForUserInput();
     cin.ignore();
 }
 

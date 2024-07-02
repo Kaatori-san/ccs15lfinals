@@ -20,7 +20,7 @@ public:
     // Rent a book to a customer
     void rentBook(BookADT& bookADT, int customerId, const string& bookTitle) {
         loadRentals();  // Load existing rental records
-
+        
         // Check if the requested book is available
         if (bookADT.checkBookAvailability(bookTitle)) {
             int bookId = -1;
