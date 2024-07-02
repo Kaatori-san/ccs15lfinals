@@ -12,9 +12,9 @@ void clrscr() {
 
 int main() {
     int choice;
-    BookADT myBook;              //  BookADT class
-    CustomerADT myCustomer;      //  CustomerADT class
-    CustomerRentADT myRental;    //  CustomerRentADT class
+    BookADT myBook;              // BookADT class
+    CustomerADT myCustomer;      // CustomerADT class
+    CustomerRentADT myRental;    // CustomerRentADT class
 
     do {
         clrscr();   // Clear the console screen
