@@ -1,20 +1,20 @@
 #ifndef BOOKADT_H
 #define BOOKADT_H
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
+#include <iostream>  // Handling input and output operations in the console log
+#include <fstream>  // used for reading and writing files. 
+#include <string>   // used for handling string data, such as storing book details etc 
+#include <vector>   // used to store nad manage the collections of Book in a resizable array-like structure
 
 #ifdef _WIN32
-#include <direct.h> 
+#include <direct.h> // mkdir() on Windows
 #else
-#include <sys/stat.h> 
+#include <sys/stat.h> // mkdir() on Unix/Linux
 #endif
 
 using namespace std;
 
-// Book structure
+// Book structure for storing book details
 struct Book {
     int id;
     string title;
@@ -30,11 +30,13 @@ public:
         cout << "Press enter to continue...";
         cin.ignore();
     }
-    void newBook() {
-        loadBooks();  
+    void newBook() {  // Adds a new book to the file
+        loadBooks();  // Loads existing books from file
 
         Book book;
-        book.id = getNextID(); 
+        book.id = getNextID();  // Generate new ID for the book
+
+        // Asks the user for book details
         cout << "Add New Book\nBook Title: ";
         cin.ignore();
         getline(cin, book.title);
@@ -45,62 +47,42 @@ public:
         cout << "Number of Copies: ";
         cin >> book.copies;
 
-        books.push_back(book);  
-        saveBooks(); 
+        books.push_back(book);  // adds the new book to the vector
+        saveBooks();            // save updated book list to file
         cout << "New Book Added!" << endl;
 
-        cout << "Wait for user input..." << endl;
+        cout << "Wait for user input..." << endl;  // waits for the user confirmation
         cin.ignore();
     }
 
-    void rentBook() {
-    loadBooks(); 
+    void rentBookByTitle(const string& title) {  // rents a book by decreasing It's available copies. 
+        loadBooks();    // Load existing books from file
 
-    string title;
-    bool bookFound = false;
-    cout << "Rent Book" << endl;
-    cout << "Book Title: ";
-    cin.ignore();  // Ignore the newline character left in the input buffer
-    getline(cin, title);
-    for (auto& book : books) {
-        if (book.title == title) {
-            bookFound = true;
-            char choice;
-            cout << "Book Title Found!\nDo you want to rent the book? Y/N: ";
-            cin >> choice;
-            if (choice == 'Y' || choice == 'y') {
+        for (auto& book : books) {
+            if (book.title == title) {
                 if (book.copies > 0) {
-                    book.copies--; 
-                    saveBooks(); 
-                    cout << "Book Rented!" << endl;
-                    waitForUserInput();
-                } else {
-                    cout << "No copies available for rent." << endl;
-                    waitForUserInput();
+                    book.copies--;  // decreases available copies, if the user inputs more than 1 copies of a book
+                    saveBooks();    // saves updated book list to file
+                    return;
                 }
             }
-            break;
         }
     }
-    if (!bookFound) {
-        cout << "Book Title Not Found!" << endl;
-        waitForUserInput();
-    }
-}
 
- 
-    void returnBook() {  
-        loadBooks();  
+    void returnBook() {  // Returns a book by increasing It's available copies
+        loadBooks();     // Load existing books from file
 
         string title;
         bool bookFound = false;
         cout << "Return Book\nBook Title: ";
-        cin.ignore();
+        cin.ignore();    // Ignores any newline characters
         getline(cin, title);
+
+        // Searches for the book ttile in the vector file
         for (auto& book : books) {
             if (book.title == title) {
                 bookFound = true;
-                book.copies++;  
+                book.copies++;  // Increases available copies
                 saveBooks();  
                 cout << "Book Returned!" << endl;
                 waitForUserInput();
@@ -113,6 +95,7 @@ public:
         }
     }
 
+    // Displays Details of a Specific Book
     void showBookDetails() {
         loadBooks(); 
 
@@ -121,9 +104,13 @@ public:
         cin.ignore();
         getline(cin, title);
         bool bookFound = false;
-        for (const auto& book : books) {
+
+        // Search for the book by title in the evctor
+        for (const auto& book : books) {  // command if book is true
             if (book.title == title) {
                 bookFound = true;
+
+                // This displays the book details if found. 
                 cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
                 waitForUserInput();
                 return;
@@ -135,10 +122,13 @@ public:
         }
     }
 
+    // Displays all the books inside th evector
     void displayAllBooks() {   
         loadBooks();  
 
         for (const auto& book : books) {
+
+            // Displayment details of every book
             cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
                  << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
         }
@@ -146,40 +136,45 @@ public:
         cin.ignore();
     }
 
+    // Checks if a specific book is available for rent. If the user enters more than 1 copies, it will say available for rent until that 1 other copy is rented.
     bool checkBookAvailability(const string& title) {   
         loadBooks();  
 
         for (const auto& book : books) {
             if (book.title == title && book.copies > 0) {
-                return true;  
+                return true;   // command if the book is found and available
             }
         }
         return false;  
     }
 
+    // Returns the vector of Books
     const vector<Book>& getBooks() const {
         return books;
     }
 
 private:
-    const char* bookPath = "./data/books.txt";  
-    vector<Book> books;                        
+    const char* bookPath = "./data/books.txt";  // This is the path for storing books data file
+    vector<Book> books;        // We use vector to store books                 
 
-    int getNextID() {
+    int getNextID() {   // This generate the next ID available for the upcoming or new book inputed by the user
         return books.empty()? 1 : books.back().id + 1;
     }
 
+    // Load books data from file into the vector
     void loadBooks() {
         ifstream file(bookPath);
         if (!file) {
             cout << "Unable to open file." << endl;
-            return; 
+            return;  // returns if file cannot be found
         }
 
-        books.clear();
+        books.clear();  // clears existing books vector
         Book book;
         string line;
         while (getline(file, line)) {
+
+            // Each line of the file to extract book details
             if (line.find("ID: ") == 0) {
                 book.id = stoi(line.substr(4));
             } else if (line.find("Title: ") == 0) {
@@ -197,19 +192,21 @@ private:
         file.close();
     }
 
+    // Saves books data from vector to file
     void saveBooks() {
     #ifdef _WIN32
-    _mkdir("./data"); 
+    _mkdir("./data");   // Creates directory for data files fro Windows
     #else
-    mkdir("./data", 0777);  
+    mkdir("./data", 0777);  // Same but for Unix/Linux
     #endif
 
-    ofstream file(bookPath);
+    ofstream file(bookPath);  // This opens the file for writing
     if (!file) {
         cout << "Unable to open file." << endl;
-        return;
+        return;   // Again, return if the file data cannot be found
     }
 
+    // Write each book's details to the file. Be much more readable and understandable if labeled and seperated from each other.
     for (const auto& book : books) {
         file << "ID: " << book.id << '\n'
              << "Title: " << book.title << '\n'
@@ -219,7 +216,7 @@ private:
              << "---\n";  // Separator between books
     }
 
-    file.close();
+    file.close();  // Closes the file stream
 }
 
 };
