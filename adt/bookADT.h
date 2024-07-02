@@ -5,7 +5,6 @@
 #include <fstream>  // used for reading and writing files. 
 #include <string>   // used for handling string data, such as storing book details etc 
 #include <vector>   // used to store nad manage the collections of Book in a resizable array-like structure
-#include <conio.h>
 
 #ifdef _WIN32
 #include <direct.h> // mkdir() on Windows
@@ -28,8 +27,8 @@ struct Book {
 class BookADT {
 public:
     void waitForUserInput() {
-        cout << "Press enter to continue...";
-        cin.ignore();
+        cout << "Press enter to continue...";  
+        cin.ignore(); // waits for the user to press the 'Enter' key
     }
     void newBook() {  // Adds a new book to the file
         loadBooks();  // Loads existing books from file
@@ -68,41 +67,41 @@ public:
     void returnBook() {  // Returns a book by increasing It's available copies
         loadBooks();     // Load existing books from file
 
-        string title;
-        bool bookFound = false;
+        string title;  // character inputs
+        bool bookFound = false;  // declares bookFound if the book is found
         cout << "Return Book\nBook Title: ";
         cin.ignore();    // Ignores any newline characters
         getline(cin, title);
 
         // Searches for the book ttile in the vector file
-        for (auto& book : books) {
-            if (book.title == title) {
-                bookFound = true;
+        for (auto& book : books) {  // repeats over each book in the 'books' vector. 
+            if (book.title == title) {  // checks if the book title matches the title entered by the user
+                bookFound = true;  // book has beend found
                 book.copies++;  // Increases available copies
-                saveBooks();  
+                saveBooks();   // function to save the updated book list to the file
                 cout << "Book Returned!" << endl;
                 return;
             }
         }
-        if (!bookFound){
+        if (!bookFound){  // checks bookFound is still flase, if no matching book was found, this section is showed to the user
             cout << "Book Title Not Found!" << endl;
         }
         waitForUserInput();
     }
 
     void showBookDetails() {
-        loadBooks(); 
+        loadBooks();  // loads the current list of books from a file into the 'books' vector. 
 
-        string title;
+        string title;  // character input
         cout << "Show Book Details\nBook Title: ";
-        cin.ignore();
-        getline(cin, title);
-        bool bookFound = false;
+        cin.ignore();  // ignores any newline characters in the input buffer from previous inputs. This also ensures that 'getline' reads the title correctly
+        getline(cin, title);  // reads the full line of input from the user and store it in the 'title' variable
+        bool bookFound = false;  // bookFound to false, if a book entered by the user is found in the 'books' vector
 
         // Search for the book by title in the evctor
-        for (const auto& book : books) {  // command if book is true
-            if (book.title == title) {
-                bookFound = true;
+        for (const auto& book : books) {  // repeats through each book in the 'books' vector
+            if (book.title == title) {  // checks if the current book matches the title entered by the user
+                bookFound = true;  // if match is found, it is true
 
                 // This displays the book details if found. 
                 cout << endl << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre << "\nPublisher: " << book.publisher << "\nCopies: " << book.copies << endl;
@@ -110,7 +109,8 @@ public:
                 return;
             }
         }
-        if (!bookFound){
+    
+        if (!bookFound){ // if not found, this shows
             cout << "Book Title Not Found!" << endl;
             waitForUserInput();
         }
@@ -120,7 +120,7 @@ public:
     void displayAllBooks() {   
         loadBooks();  
 
-        for (const auto& book : books) {
+        for (const auto& book : books) {  // repeats through each book in the 'books' vector
 
             // Displayment details of every book
             cout << "ID: " << book.id << "\nTitle: " << book.title << "\nGenre: " << book.genre
@@ -148,28 +148,28 @@ public:
     }
 
 private:
-    const char* bookPath = "./data/books.txt";  // This is the path for storing books data file
+    const char* bookPath = "./data/books.txt";  // This is the path for storing books data file. This declares a constant character pointer named bookPath
     vector<Book> books;        // We use vector to store books                 
 
     int getNextID() {   // This generate the next ID available for the upcoming or new book inputed by the user
-        return books.empty()? 1 : books.back().id + 1;
+        return books.empty()? 1 : books.back().id + 1;  // checks if the 'books' vector is empty, if empty returns 1 as the next ID. If not, retrieves and continue the ID of the last book
     }
 
     // Load books data from file into the vector
     void loadBooks() {
-        ifstream file(bookPath);
-        if (!file) {
+        ifstream file(bookPath);  // creates an input file stream object named file and to open the file specified by the 'bookPath'
+        if (!file) {  // checks if the file is opened
             cout << "Unable to open file." << endl;
             return;  // returns if file cannot be found
         }
 
         books.clear();  // clears existing books vector
-        Book book;
-        string line;
-        while (getline(file, line)) {
+        Book book;  // declares any variable 'book' of type 'Book'. This is used to temporarily store data for each book read from the file
+        string line;  // variable 'line' to store each line of text read from the file
+        while (getline(file, line)) {  // reads each line of the file until there are no more lines
 
             // Each line of the file to extract book details
-            if (line.find("ID: ") == 0) {
+            if (line.find("ID: ") == 0) {  // checks each line to determine its content and assign values
                 book.id = stoi(line.substr(4));
             } else if (line.find("Title: ") == 0) {
                 book.title = line.substr(7);
