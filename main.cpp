@@ -110,6 +110,8 @@ int main() {
             default:
                 cout << "Invalid input. Please try again." << endl;
         }
+
+        cin.ignore(); // Clear input buffer before next iteration
     } while (choice != 8);   // Repeat until the user chooses to exit
 
     return 0;
