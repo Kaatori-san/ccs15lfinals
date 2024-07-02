@@ -8,9 +8,9 @@
 #include "bookADT.h" // Including the BookADT header file for book operations
 
 #ifdef _WIN32
-#include <direct.h>
+#include <direct.h> // for windows
 #else
-#include <sys/stat.h>
+#include <sys/stat.h>  // for unix like systems
 #endif
 
 using namespace std;
@@ -119,12 +119,12 @@ private:
 #endif
 
         ofstream file(rentalPath); // Open file for writing
-        if (!file) {
+        if (!file) {  // if the file is not found
             cout << "Unable to open file." << endl; // Print error message if file cannot be opened
             return;
         }
 
-        // Write each rental record to file
+        // Write each rental record to file 
         for (const auto& rental : rentals) {
             file << "Customer ID: " << rental.customerId << '\n'; // Write customer ID to file
             file << "Book IDs: ";
