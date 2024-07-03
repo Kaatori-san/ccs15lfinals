@@ -1,44 +1,44 @@
-// customerADT
-
 #ifndef CUSTOMERADT_H
 #define CUSTOMERADT_H
 
-#include <iostream>  // Handling input and output operations in the console log
-#include <fstream>  // used for reading and writing files. 
-#include <string>   // used for handling string data, such as storing book details etc 
-#include <vector>   // used to store nad manage the collections of Book in a resizable array-like structure
-#include "bookADT.h"  // connects to other ADT files
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include "bookADT.h"
 #include "customerRentADT.h"
 
 #ifdef _WIN32
-#include <direct.h> // for windows systems
+#include <direct.h>
 #else
-#include <sys/stat.h>  // for other systems
+#include <sys/stat.h>
 #endif
 
 using namespace std;
 
 class CustomerADT {
 public:
-    // add a new customer
+    // Add a new customer
     void addCustomer();
 
-    // shows specific details of a customer by their ID
+    // Shows specific details of a customer by their ID
     void showCustomerDetails();
 
-    // Prints every details of all customers in the customers.txt file
+    // Prints every detail of all customers in the customers.txt file
     void printAllCustomers();
+    
+    // Check if a customer ID is available
+    bool isCustomerIDAvailable(int id);
 
 private:
-    // Structure defining a Customer
     struct Customer {
         int id;
         string name;
         string address;
     };
 
-    const char* customerPath = "./data/customers.txt";  // Path to the customer data file
-    vector<Customer> customers;  // Vector to store customer records
+    const char* customerPath = "./data/customers.txt"; // Path to the customer data file
+    vector<Customer> customers; // Vector to store customer records
 
     // Function to get the next available customer ID
     int getNextID();
@@ -60,7 +60,7 @@ private:
     // Helper function to wait for user input
     void waitForUserInput() {
         cout << "Press enter to continue...";
-        cin.ignore();
+        cin.get();
     }
 };
 
@@ -135,10 +135,11 @@ void CustomerADT::addCustomer() {
     customers.push_back(customer);
     appendCustomer(customer);
     cout << "New Customer Added!" << endl;
+    cout << "Customer ID Number: " << customer.id << endl;
     waitForUserInput();   // waits for the user to click on the "enter" key.
 }
 
-// I showCustomerDetails function
+// showCustomerDetails function with error handling
 void CustomerADT::showCustomerDetails() {
     if (!loadCustomers()) {
         return;  // Exit if loading customers fails
@@ -147,6 +148,15 @@ void CustomerADT::showCustomerDetails() {
     int id;
     cout << "Show Customer Details\nCustomer ID: ";
     cin >> id;
+    
+    if (cin.fail()) {  // Check for input error
+        cin.clear();  // Clear the error flag
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
+        printError("Invalid input. Please enter a valid Customer ID.");
+        waitForUserInput();
+        return;
+    }
+    
     cin.ignore();
 
     bool found = false;  // tracked whether the user entered an ID that's inside the file
@@ -173,10 +183,12 @@ void CustomerADT::printAllCustomers() {
 
     if (customers.empty()) {  // Checks if the 'customers' vector is empty, if it's empty then this print will be shown. 
         cout << "No customers found." << endl;
+        waitForUserInput();
+        cin.ignore();  // ignores any remaining characters in the input buffer. Ensures that the input operations will work correctly
         return;
     }
 
-    for (const auto& customer : customers) {  // This loop repeats itself over each cusyomer in the 'customers' vector
+    for (const auto& customer : customers) {  // This loop repeats itself over each customer in the 'customers' vector
         cout << "ID: " << customer.id << "\nName: " << customer.name << "\nAddress: " << customer.address << endl;
     }
     waitForUserInput();
@@ -205,6 +217,16 @@ void CustomerADT::saveCustomers() {
     }
 
     file.close();
+}
+
+// Function to check if a customer ID exists
+bool CustomerADT::isCustomerIDAvailable(int id) {
+    for (const auto& customer : customers) {
+        if (customer.id == id) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #endif
