@@ -1,3 +1,4 @@
+
 #ifndef CUSTOMERCENTADT_H
 #define CUSTOMERCENTADT_H
 
@@ -5,28 +6,25 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "bookADT.h" // Including the BookADT header file for book operations
+#include "bookADT.h"
 
 #ifdef _WIN32
-#include <direct.h> // for windows
+#include <direct.h>
 #else
-#include <sys/stat.h>  // for unix like systems
+#include <sys/stat.h>
 #endif
 
 using namespace std;
 
 class CustomerRentADT {
 public:
-    // Rent a book to a customer
     void rentBook(BookADT& bookADT, int customerId, const string& bookTitle) {
-        loadRentals();  // Load existing rental records
-        
-        // Check if the requested book is available
+        loadRentals();
+
         if (bookADT.checkBookAvailability(bookTitle)) {
             int bookId = -1;
             const auto& books = bookADT.getBooks();
 
-            // Find the ID of the book by its title
             for (const auto& book : books) {
                 if (book.title == bookTitle) {
                     bookId = book.id;
@@ -34,110 +32,96 @@ public:
                 }
             }
 
-            // If the book ID is found
             if (bookId != -1) {
-                // Check if the customer already has a rental record
                 for (auto& rental : rentals) {
                     if (rental.customerId == customerId) {
-                        rental.bookIds.push_back(bookId); // Add the book to the customer's rental
-                        bookADT.rentBookByTitle(bookTitle); // Update book availability
-                        saveRentals(); // Save the updated rental records
-                        cout << "Book Rented!" << endl; // Print confirmation message
+                        rental.bookIds.push_back(bookId);
+                        bookADT.rentBookByTitle(bookTitle);
+                        saveRentals();
+                        cout << "Book Rented!" << endl;
                         return;
                     }
                 }
 
-                // If no rental record exists for the customer, create a new one
                 Rental newRental;
                 newRental.customerId = customerId;
-                newRental.bookIds.push_back(bookId); // Add the book to the new rental record
-                rentals.push_back(newRental); // Add the new rental record to the list
-                bookADT.rentBookByTitle(bookTitle); // Update book availability
-                saveRentals(); // Save the updated rental records
-                cout << "Book Rented!" << endl; // Print confirmation message
+                newRental.bookIds.push_back(bookId);
+                rentals.push_back(newRental);
+                bookADT.rentBookByTitle(bookTitle);
+                saveRentals();
+                cout << "Book Rented!" << endl;
             }
         } else {
-            cout << "Book Not Available!" << endl; // Print message if book is not available
+            cout << "Book Not Available!" << endl;
         }
     }
 
 private:
     struct Rental {
-        int customerId; // Customer ID associated with the rental
-        vector<int> bookIds; // IDs of books rented by the customer
+        int customerId;
+        vector<int> bookIds;
     };
 
-    const char* rentalPath = "./data/rentals.txt"; // File path for storing rental records
-    vector<Rental> rentals; // Vector to store all rental records
+    const char* rentalPath = "./data/rentals.txt";
+    vector<Rental> rentals;
 
-    // Load existing rental records from file
     void loadRentals() {
-        ifstream file(rentalPath); // Open file for reading
+        ifstream file(rentalPath);
         if (!file) {
-            cout << "Unable to open file." << endl; // Print error message if file cannot be opened
+            cout << "Unable to open file." << endl;
             return;
         }
 
-        rentals.clear(); // Clear existing rentals vector
-        Rental rental; // Temporary variable to hold rental record
-        string line; // String variable to hold each line of the file
+        rentals.clear();
+        Rental rental;
+        string line;
         while (getline(file, line)) {
-            // Checks if the line contains: Customer ID: 
             if (line.find("Customer ID: ") == 0) {
-                // Extract the customer ID from the line starting after "Customer ID: "
                 rental.customerId = stoi(line.substr(13));
-            }
-            //  Checks if the line contains: Book ID:  
-            else if (line.find("Book IDs: ") == 0) {
-                rental.bookIds.clear(); // Clear existing book IDs
-
-                // Extracts IDs substrings starting right after Book ID:
-                string ids = line.substr(10); 
-                size_t pos = 0; // Position variable for parsing
+            } else if (line.find("Book IDs: ") == 0) {
+                rental.bookIds.clear();
+                string ids = line.substr(10);
+                size_t pos = 0;
                 while ((pos = ids.find(",")) != string::npos) {
-                    rental.bookIds.push_back(stoi(ids.substr(0, pos))); // Add parsed ID to vector
-                    ids.erase(0, pos + 1); // Erase parsed part from substring
+                    rental.bookIds.push_back(stoi(ids.substr(0, pos)));
+                    ids.erase(0, pos + 1);
                 }
                 if (!ids.empty()) {
-                    rental.bookIds.push_back(stoi(ids)); // Add last ID to vector
+                    rental.bookIds.push_back(stoi(ids));
                 }
-            }
-            // End of rental record
-            else if (line == "---") {
-                rentals.push_back(rental); // Add completed rental record to vector
+            } else if (line == "---") {
+                rentals.push_back(rental);
             }
         }
-        file.close(); // Close file after reading
+        file.close();
     }
 
-    // Save updated rental records to file
     void saveRentals() {
 #ifdef _WIN32
-        _mkdir("./data"); // Create directory for data storage (Windows)
+        _mkdir("./data");
 #else
-        mkdir("./data", 0777); // Create directory for data storage (Unix-like systems)
+        mkdir("./data", 0777);
 #endif
 
-        ofstream file(rentalPath); // Open file for writing
-        if (!file) {  // if the file is not found
-            cout << "Unable to open file." << endl; // Print error message if file cannot be opened
+        ofstream file(rentalPath);
+        if (!file) {
+            cout << "Unable to open file." << endl;
             return;
         }
 
-        // Write each rental record to file 
         for (const auto& rental : rentals) {
-            file << "Customer ID: " << rental.customerId << '\n'; // Write customer ID to file
+            file << "Customer ID: " << rental.customerId << '\n';
             file << "Book IDs: ";
             for (size_t i = 0; i < rental.bookIds.size(); ++i) {
-                file << rental.bookIds[i]; // Write each book ID to file
+                file << rental.bookIds[i];
                 if (i != rental.bookIds.size() - 1) {
-                    file << ","; // Separate book IDs with commas
+                    file << ",";
                 }
             }
-            file << '\n' << "---\n"; // End of rental record
+            file << '\n' << "---\n";
         }
 
-        file.close(); // Close file after writing
+        file.close();
     }
 };
 
