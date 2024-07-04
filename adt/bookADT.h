@@ -92,14 +92,15 @@ public:
                 book.copies++;
                 saveBooks();
                 cout << "Book Returned!" << endl;
+                waitForUserInput();
                 return;
             }
         }
 
         if (!bookFound) {
             cout << "Book Title Not Found!" << endl;
+            waitForUserInput();
         }
-        waitForUserInput();
     }
 
     void showBookDetails() {
