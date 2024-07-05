@@ -59,24 +59,33 @@ public:
             bookFound = true;
             if (book.copies > 0) {
                 char choice;
-                cout << "Book Found!\n Do You Want to Rent the book? Y/N: ";
+                cout << "Book Found!\nDo You Want to Rent the book? Y/N: ";
                 cin >> choice;
                 cin.ignore(); 
 
                 if (toupper(choice) == 'Y') {
                     book.copies--;
                     saveBooks();
+                    cout << "Book has been rented successfully!" << endl;
+                } else {
+                    cout << "Book rental cancelled." << endl;
                 }
-                
-                break; // Exit loop after processing the book
+                waitForUserInput();
+                return;
+            } else {
+                cout << "Book Not Available!" << endl;
+                waitForUserInput();
+                return;
             }
         }
     }
 
     if (!bookFound) {
-        cout << "Book Not Found or Not Available!" << endl;
+        cout << "Book Not Found!" << endl;
+        waitForUserInput();
     }
 }
+
 
     void returnBook() {
         loadBooks();
