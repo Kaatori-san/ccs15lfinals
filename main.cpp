@@ -43,7 +43,6 @@ int main() {
         cout << "\t[8] Exit Program" << endl;
         cout << "\tEnter your choice: ";
 
-        // Input validation loop for choice
         while (!(cin >> choice) || choice < 1 || choice > 8 || cin.peek() != '\n') {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -62,9 +61,15 @@ int main() {
                 int customerId;
                 string bookTitle;
                 cout << "Enter Customer ID: ";
-                cin >> customerId;
+
+                while (!(cin >> customerId) || cin.peek() != '\n') {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Invalid Input. Input a Valid Customer ID number: ";
+                }
+                cin.ignore();
+
                 cout << "Enter Book Title: ";
-                cin.ignore();   
                 getline(cin, bookTitle);
                 myRental.rentBook(myBook, customerId, bookTitle);  
                 break;
