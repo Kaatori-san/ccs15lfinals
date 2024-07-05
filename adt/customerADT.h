@@ -129,13 +129,18 @@ void CustomerADT::showCustomerDetails() {
 
     int id;
     cout << "Show Customer Details\nCustomer ID: ";
-    cin >> id;
+
+    while (!(cin >> id) || cin.peek() != '\n') {
+        cin.clear(); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cout << "Invalid Input. Input a Valid Customer ID number: ";
+    }
     cin.ignore();
 
     bool found = false;
     for (const auto& customer : customers) {
         if (customer.id == id) {
-            cout << "\n"<< "ID: " << customer.id << "\nName: " << customer.name << "\nAddress: " << customer.address << endl;
+            cout << "\n" << "ID: " << customer.id << "\nName: " << customer.name << "\nAddress: " << customer.address << endl;
             found = true;
             break;
         }
@@ -146,6 +151,7 @@ void CustomerADT::showCustomerDetails() {
     }
     waitForUserInput();
 }
+
 
 void CustomerADT::printAllCustomers() {
     if (!loadCustomers()) {
