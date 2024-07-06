@@ -23,16 +23,36 @@ void checkBook(BookADT& myBook) {
     cout << "Press enter to continue...";
     cin.ignore();   
 }
-
+void waitForUserInput() {
+    cout << "Press enter to continue...";
+    cin.ignore();
+}
+bool getCustomerId(int &customerId) {
+    cout << "Enter Customer ID: ";
+    cin >> customerId;
+    if (cin.fail() || customerId <= 0) {
+        cin.clear();  // Clear the error flag on cin
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard bad input
+        cout << "Invalid Customer ID. Please enter a positive integer." << endl;
+        waitForUserInput();
+        return false;
+    }
+    cin.ignore();
+    return true;
+}
 int main() {
-    int choice;
+    // declare variables
+    char choice, subChoice;
+    int customerId;
     BookADT myBook;              
     CustomerADT myCustomer;     
-    CustomerRentADT myRental;   
+    CustomerRentADT myRental;
 
+    myBook.accessBooks();
+    myCustomer.accessCustomers();
     do {
         clrscr();  
-        cout << "\n-----------------------------------------------------" << endl;
+        cout << "\t---- Library Management System ----" << endl;
         cout << "\t[1] New Book" << endl;
         cout << "\t[2] Rent a Book" << endl;
         cout << "\t[3] Return a Book" << endl;
@@ -42,108 +62,107 @@ int main() {
         cout << "\t[7] Customer Maintenance" << endl;
         cout << "\t[8] Exit Program" << endl;
         cout << "\tEnter your choice: ";
-
-        while (!(cin >> choice) || choice < 1 || choice > 8 || cin.peek() != '\n') {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "\n-----------------------------------------------------" << endl;
-            cout << "Invalid input. Please enter a single digit number between (1-8): ";
-        }
+        cin >> choice;
 
         switch (choice) {
-            case 1: {
+            case '1': {
                 clrscr();
                 myBook.newBook();   
                 break;
             }
-            case 2: {
+            case '2': {
                 clrscr();
-                int customerId;
+                
                 string bookTitle;
-                cout << "Enter Customer ID: ";
-
-                while (!(cin >> customerId) || cin.peek() != '\n') {
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "Invalid Input. Input a Valid Customer ID number: ";
-                }
-                cin.ignore();
-
-                cout << "Enter Book Title: ";
-                getline(cin, bookTitle);
-                myRental.rentBook(myBook, customerId, bookTitle);  
+                if (getCustomerId(customerId)) {
+                    if (myCustomer.isCustomerIDAvailable(customerId)) {
+                        cout << "Enter Book Title: ";
+                        getline(cin, bookTitle);
+                        myRental.rentBook(myBook, customerId, bookTitle); 
+                    } else {
+                        cout << "Customer ID Not Found!" << endl;
+                        waitForUserInput();
+                    }
+                } 
                 break;
             }
-            case 3: {
+            case '3': {
                 clrscr();
-                myBook.returnBook();   
+                if (getCustomerId(customerId)) {
+                    if (myCustomer.isCustomerIDAvailable(customerId)) {
+                        myBook.returnBook(); 
+                    } else {
+                        cout << "Customer ID Not Found!" << endl;
+                        waitForUserInput();
+                    }
+                }   
                 break;
             }
-            case 4: {
+            case '4': {
                 clrscr();
                 myBook.showBookDetails();   
                 break;
             }
-            case 5: {
+            case '5': {
                 clrscr();
                 myBook.displayAllBooks();   
                 break;
             }
-            case 6: {
+            case '6': {
                 clrscr();
                 checkBook(myBook);   
                 break;
             }
-            case 7: {
+            case '7': {
                 clrscr();
-                cout << "\n-----------------------------------------------------" << endl;
+                cout << "\t---- Customer Maintenance ----" << endl;
                 cout << "\t[1] Add Customer" << endl;
                 cout << "\t[2] Show Customer Details" << endl;
-                cout << "\t[3] Print All Customers" << endl;
+                cout << "\t[3] Show All Customers" << endl;
                 cout << "\t[4] Back to Main Menu" << endl;
                 cout << "\tEnter your choice: ";
-                
-                int subChoice;
-                while (!(cin >> subChoice) || subChoice < 1 || subChoice > 4 || cin.peek() != '\n') {
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "\n-----------------------------------------------------" << endl;
-                    cout << "Invalid input. Please enter a single digit number between (1-4): ";
-                }
+                cin >> subChoice;
 
                 switch (subChoice) {
-                    case 1: {
+                    case '1': {
                         clrscr();
                         myCustomer.addCustomer();   
                         break;
                     }
-                    case 2: {
+                    case '2': {
                         clrscr();
                         myCustomer.showCustomerDetails();    
                         break;
                     }
-                    case 3: {
+                    case '3': {
                         clrscr();
                         myCustomer.printAllCustomers();     
                         break;
                     }
-                    case 4: {   
+                    case '4': {   
                         break;
                     }
                     default:
                         cout << "Invalid input. Please try again." << endl;
+                        waitForUserInput();
+                        cin.ignore();
+                        break;
                 }
                 break;
             }
-            case 8: {
+            case '8': {
                 clrscr();
                 cout << "Exiting Program." << endl;
                 break;
             }
             default:
                 cout << "Invalid input. Please try again." << endl;
+                waitForUserInput();
+                cin.ignore();
+                break;
+
         }
-    } while (choice != 8);   
+    } while (choice != '8');   
 
     return 0;
 }

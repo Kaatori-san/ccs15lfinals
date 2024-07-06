@@ -25,6 +25,12 @@ public:
 
     void printAllCustomers();
 
+    // Check if a customer ID is available
+    bool isCustomerIDAvailable(int id);
+
+    void accessCustomers() {
+        loadCustomers();
+    }
 private:
     struct Customer {
         int id;
@@ -192,5 +198,16 @@ void CustomerADT::saveCustomers() {
 
     file.close();
 }
+
+// Function to check if a customer ID exists
+bool CustomerADT::isCustomerIDAvailable(int id) {
+    for (const auto& customer : customers) {
+        if (customer.id == id) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 #endif

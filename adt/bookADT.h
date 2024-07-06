@@ -25,6 +25,9 @@ struct Book {
 
 class BookADT {
 public:
+    void accessBooks() {
+        loadBooks();
+    }
     void waitForUserInput() {
         cout << "Press enter to continue...";
         cin.ignore();
@@ -76,6 +79,7 @@ public:
             } else {
                 cout << "Book Not Available!" << endl;
                 waitForUserInput();
+                cin.ignore();
                 return;
             }
         }
@@ -93,13 +97,6 @@ public:
         string title;
         bool bookFound = false;
 
-        cout << "Returning A Book?\n\nCustomer ID: ";
-        while (!(cin >> customerId) || cin.peek() != '\n') {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid Input. Input a Valid Customer ID number: ";
-        }
-        cin.ignore(); 
         cout << "Book Title: ";
         getline(cin, title);
 

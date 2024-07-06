@@ -18,6 +18,10 @@ using namespace std;
 
 class CustomerRentADT {
 public:
+    void waitForUserInput() {
+        cout << "Press enter to continue...";
+        cin.ignore();
+    }
     void rentBook(BookADT& bookADT, int customerId, const string& bookTitle) {
         loadRentals();
 
@@ -51,6 +55,7 @@ public:
             }
         } else {
             cout << "Book Not Available!" << endl;
+            waitForUserInput();
         }
     }
 
