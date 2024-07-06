@@ -119,6 +119,7 @@ void CustomerADT::addCustomer() {
     customers.push_back(customer);
     appendCustomer(customer);
     cout << "New Customer Added!" << endl;
+    cout <<  "Customer  ID: " << customer.id << endl;
     waitForUserInput();
 }
 
@@ -151,7 +152,6 @@ void CustomerADT::showCustomerDetails() {
     }
     waitForUserInput();
 }
-
 
 void CustomerADT::printAllCustomers() {
     if (!loadCustomers()) {
