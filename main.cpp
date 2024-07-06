@@ -23,10 +23,12 @@ void checkBook(BookADT& myBook) {
     cout << "Press enter to continue...";
     cin.ignore();   
 }
+
 void waitForUserInput() {
     cout << "Press enter to continue...";
     cin.ignore();
 }
+
 bool getCustomerId(int &customerId) {
     cout << "Enter Customer ID: ";
     cin >> customerId;
@@ -40,9 +42,23 @@ bool getCustomerId(int &customerId) {
     cin.ignore();
     return true;
 }
+
+bool getChoice(int &choice) {
+    cout << "\tEnter your choice: ";
+    cin >> choice;
+    if (cin.fail()) {
+        cin.clear();  // Clear the error flag on cin
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard bad input
+        cout << "Invalid input. Please enter an integer." << endl;
+        waitForUserInput();
+        return false;
+    }
+    return true;
+}
+
 int main() {
     // declare variables
-    char choice, subChoice;
+    int choice, subChoice;
     int customerId;
     BookADT myBook;              
     CustomerADT myCustomer;     
@@ -61,22 +77,25 @@ int main() {
         cout << "\t[6] Check Book Availability" << endl;
         cout << "\t[7] Customer Maintenance" << endl;
         cout << "\t[8] Exit Program" << endl;
-        cout << "\tEnter your choice: ";
-        cin >> choice;
+        
+        if (!getChoice(choice)) {
+            continue;
+        }
 
         switch (choice) {
-            case '1': {
+            case 1: {
                 clrscr();
                 myBook.newBook();   
                 break;
             }
-            case '2': {
+            case 2: {
                 clrscr();
                 
                 string bookTitle;
                 if (getCustomerId(customerId)) {
                     if (myCustomer.isCustomerIDAvailable(customerId)) {
                         cout << "Enter Book Title: ";
+                        cin.ignore();
                         getline(cin, bookTitle);
                         myRental.rentBook(myBook, customerId, bookTitle); 
                     } else {
@@ -86,7 +105,7 @@ int main() {
                 } 
                 break;
             }
-            case '3': {
+            case 3: {
                 clrscr();
                 if (getCustomerId(customerId)) {
                     if (myCustomer.isCustomerIDAvailable(customerId)) {
@@ -98,48 +117,50 @@ int main() {
                 }   
                 break;
             }
-            case '4': {
+            case 4: {
                 clrscr();
                 myBook.showBookDetails();   
                 break;
             }
-            case '5': {
+            case 5: {
                 clrscr();
                 myBook.displayAllBooks();   
                 break;
             }
-            case '6': {
+            case 6: {
                 clrscr();
                 checkBook(myBook);   
                 break;
             }
-            case '7': {
+            case 7: {
                 clrscr();
                 cout << "\t---- Customer Maintenance ----" << endl;
                 cout << "\t[1] Add Customer" << endl;
                 cout << "\t[2] Show Customer Details" << endl;
                 cout << "\t[3] Show All Customers" << endl;
                 cout << "\t[4] Back to Main Menu" << endl;
-                cout << "\tEnter your choice: ";
-                cin >> subChoice;
+                
+                if (!getChoice(subChoice)) {
+                    continue;
+                }
 
                 switch (subChoice) {
-                    case '1': {
+                    case 1: {
                         clrscr();
                         myCustomer.addCustomer();   
                         break;
                     }
-                    case '2': {
+                    case 2: {
                         clrscr();
                         myCustomer.showCustomerDetails();    
                         break;
                     }
-                    case '3': {
+                    case 3: {
                         clrscr();
                         myCustomer.printAllCustomers();     
                         break;
                     }
-                    case '4': {   
+                    case 4: {   
                         break;
                     }
                     default:
@@ -150,7 +171,7 @@ int main() {
                 }
                 break;
             }
-            case '8': {
+            case 8: {
                 clrscr();
                 cout << "Exiting Program." << endl;
                 break;
@@ -162,7 +183,7 @@ int main() {
                 break;
 
         }
-    } while (choice != '8');   
+    } while (choice != 8);   
 
     return 0;
 }
