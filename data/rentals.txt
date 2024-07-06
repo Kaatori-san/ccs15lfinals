@@ -1,0 +1,3 @@
+Customer ID: 1
+Book IDs: 1,1,2
+---

@@ -23,12 +23,10 @@ void checkBook(BookADT& myBook) {
     cout << "Press enter to continue...";
     cin.ignore();   
 }
-
 void waitForUserInput() {
     cout << "Press enter to continue...";
     cin.ignore();
 }
-
 bool getCustomerId(int &customerId) {
     cout << "Enter Customer ID: ";
     cin >> customerId;
@@ -42,7 +40,6 @@ bool getCustomerId(int &customerId) {
     cin.ignore();
     return true;
 }
-
 bool getChoice(int &choice) {
     cout << "\tEnter your choice: ";
     cin >> choice;
@@ -55,7 +52,6 @@ bool getChoice(int &choice) {
     }
     return true;
 }
-
 int main() {
     // declare variables
     int choice, subChoice;
@@ -77,7 +73,7 @@ int main() {
         cout << "\t[6] Check Book Availability" << endl;
         cout << "\t[7] Customer Maintenance" << endl;
         cout << "\t[8] Exit Program" << endl;
-        
+
         if (!getChoice(choice)) {
             continue;
         }
@@ -95,7 +91,6 @@ int main() {
                 if (getCustomerId(customerId)) {
                     if (myCustomer.isCustomerIDAvailable(customerId)) {
                         cout << "Enter Book Title: ";
-                        cin.ignore();
                         getline(cin, bookTitle);
                         myRental.rentBook(myBook, customerId, bookTitle); 
                     } else {
@@ -139,11 +134,10 @@ int main() {
                 cout << "\t[2] Show Customer Details" << endl;
                 cout << "\t[3] Show All Customers" << endl;
                 cout << "\t[4] Back to Main Menu" << endl;
-                
+
                 if (!getChoice(subChoice)) {
                     continue;
                 }
-
                 switch (subChoice) {
                     case 1: {
                         clrscr();
