@@ -38,7 +38,6 @@ public:
                         rental.bookIds.push_back(bookId);
                         bookADT.rentBookByTitle(bookTitle);
                         saveRentals();
-                        cout << "Book Rented!" << endl;
                         return;
                     }
                 }
@@ -49,7 +48,6 @@ public:
                 rentals.push_back(newRental);
                 bookADT.rentBookByTitle(bookTitle);
                 saveRentals();
-                cout << "Book Rented!" << endl;
             }
         } else {
             cout << "Book Not Available!" << endl;
