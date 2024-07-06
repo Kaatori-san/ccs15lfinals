@@ -1,0 +1,84 @@
+Customer ID: 1
+Name: Coleen N Aclaro
+Address: Blk 27 Lot 31 Ph-1C
+---
+Customer ID: 2
+Name: James Edward Agbayani
+Address: Cavite
+---
+Customer ID: 3
+Name: Samantha Maria Depamaylo
+Address: San Pedro
+---
+Customer ID: 4
+Name: Alyssa Uy Faith
+Address: Las Pinas
+---
+Customer ID: 5
+Name: Matthew Ampaya
+Address: Alabang
+---
+Customer ID: 6
+Name: Gabriel Jasmin
+Address: PH-1A Santa Rosa Laguna
+---
+Customer ID: 7
+Name: Ishikawa Miguel
+Address: Cavite
+---
+Customer ID: 8
+Name: Black Batula
+Address: Cavite
+---
+Customer ID: 9
+Name: Regil Requirme
+Address: Cavite
+---
+Customer ID: 10
+Name: Beane Bas
+Address: San Pedro
+---
+Customer ID: 11
+Name: James Tipon
+Address: San Pedro
+---
+Customer ID: 12
+Name: hi
+Address: hellocd "/Users/coleenaclaro/c++ projects/FINALS/" && g++ main.cpp -o main && "/Users/coleenaclaro/c++ projects/FINALS/"main
+---
+Customer ID: 13
+Name: Zedrik DY
+Address: DY
+---
+Customer ID: 14
+Name: Jianna Shae Ramos
+Address: Las Pinas
+---
+Customer ID: 15
+Name: Sabowg Bitches
+Address: Messenger
+---
+Customer ID: 16
+Name: Winnie the POOH
+Address: POOH POOH
+---
+Customer ID: 17
+Name: Hello
+Address: Tangina
+---
+Customer ID: 18
+Name: HALA
+Address: HALA
+---
+Customer ID: 19
+Name: f
+Address: f
+---
+Customer ID: 20
+Name: j
+Address: j
+---
+Customer ID: 21
+Name: c
+Address: c
+---
