@@ -1,0 +1,8 @@
+Customer ID: 1
+Name: zed
+Address: calamba
+---
+Customer ID: 2
+Name: regine
+Address: kv
+---
