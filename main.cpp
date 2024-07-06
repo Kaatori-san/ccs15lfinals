@@ -25,7 +25,7 @@ void checkBook(BookADT& myBook) {
 }
 
 int main() {
-    char subChoice, choice;
+    int choice;
     BookADT myBook;              
     CustomerADT myCustomer;     
     CustomerRentADT myRental;   
@@ -51,12 +51,12 @@ int main() {
         }
 
         switch (choice) {
-            case '1': {
+            case 1: {
                 clrscr();
                 myBook.newBook();   
                 break;
             }
-            case '2': {
+            case 2: {
                 clrscr();
                 int customerId;
                 string bookTitle;
@@ -74,27 +74,27 @@ int main() {
                 myRental.rentBook(myBook, customerId, bookTitle);  
                 break;
             }
-            case '3': {
+            case 3: {
                 clrscr();
                 myBook.returnBook();   
                 break;
             }
-            case '4': {
+            case 4: {
                 clrscr();
                 myBook.showBookDetails();   
                 break;
             }
-            case '5': {
+            case 5: {
                 clrscr();
                 myBook.displayAllBooks();   
                 break;
             }
-            case '6': {
+            case 6: {
                 clrscr();
                 checkBook(myBook);   
                 break;
             }
-            case '7': {
+            case 7: {
                 clrscr();
                 cout << "\n-----------------------------------------------------" << endl;
                 cout << "\t[1] Add Customer" << endl;
@@ -103,6 +103,7 @@ int main() {
                 cout << "\t[4] Back to Main Menu" << endl;
                 cout << "\tEnter your choice: ";
                 
+                int subChoice;
                 while (!(cin >> subChoice) || subChoice < 1 || subChoice > 4 || cin.peek() != '\n') {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -111,22 +112,22 @@ int main() {
                 }
 
                 switch (subChoice) {
-                    case '1': {
+                    case 1: {
                         clrscr();
                         myCustomer.addCustomer();   
                         break;
                     }
-                    case '2': {
+                    case 2: {
                         clrscr();
                         myCustomer.showCustomerDetails();    
                         break;
                     }
-                    case '3': {
+                    case 3: {
                         clrscr();
                         myCustomer.printAllCustomers();     
                         break;
                     }
-                    case '4': {   
+                    case 4: {   
                         break;
                     }
                     default:
@@ -134,7 +135,7 @@ int main() {
                 }
                 break;
             }
-            case '8': {
+            case 8: {
                 clrscr();
                 cout << "Exiting Program." << endl;
                 break;
@@ -142,7 +143,7 @@ int main() {
             default:
                 cout << "Invalid input. Please try again." << endl;
         }
-    } while (choice != '8');   
+    } while (choice != 8);   
 
     return 0;
 }
