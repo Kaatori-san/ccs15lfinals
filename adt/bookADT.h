@@ -1,4 +1,4 @@
-
+\
 #ifndef BOOKADT_H
 #define BOOKADT_H
 
@@ -43,6 +43,7 @@ public:
         getline(cin, book.publisher);
         cout << "Number of Copies: ";
         cin >> book.copies;
+        cin.ignore();
         books.push_back(book);
         saveBooks();
         cout << "\n---------------" << endl;
@@ -86,13 +87,20 @@ public:
     }
 }
 
-
     void returnBook() {
         loadBooks();
+        int customerId;
         string title;
         bool bookFound = false;
-        cout << "Returning A Book?\n\nBook Title: ";
-        cin.ignore();
+
+        cout << "Returning A Book?\n\nCustomer ID: ";
+        while (!(cin >> customerId) || cin.peek() != '\n') {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid Input. Input a Valid Customer ID number: ";
+        }
+        cin.ignore(); 
+        cout << "Book Title: ";
         getline(cin, title);
 
         for (auto& book : books) {
